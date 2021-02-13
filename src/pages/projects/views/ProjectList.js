@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProjectCard from './ProjectCard';
 
-const ProjectList = React.memo(({ projects }) => {
+const ProjectList = React.memo(({ projects, handleRemoveProject }) => {
   return (
     <>
       {
-        projects.map(({id, name}) => {
-          return <ProjectCard key={id} id={id} name={name} />
+        !!projects.length && projects.map(({id, name}) => {
+          return <ProjectCard key={id} id={id} name={name} handleRemoveProject={handleRemoveProject} />
         })
       }
     </>
@@ -21,6 +21,7 @@ ProjectList.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
+  handleRemoveProject: PropTypes.func.isRequired,
 };
 
 export default ProjectList;

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import AddProject from '../views/AddProject';
 import ProjectList from '../views/ProjectList';
 
 const ProjectsContainer = React.memo(props => {
-  const projects = [
+  const [projects, setProjects] = useState([
     {
       id: 1,
       name: 'Ruvita',
@@ -15,10 +16,28 @@ const ProjectsContainer = React.memo(props => {
       id: 3,
       name: 'Google',
     },
-  ]
+  ]);
+
+  const handleAddProject = (name) => {
+    setProjects(prevState => {
+      return [
+        ...prevState,
+        {
+          id: Date.now(),
+          name,
+        }
+      ];
+    });
+  };
+
+  const handleRemoveProject = (id) => {
+    setProjects(prevState => prevState.filter(project => project.id !== id));
+  }
+
   return (
     <div>
-      <ProjectList projects={projects} />
+      <ProjectList projects={projects} handleRemoveProject={handleRemoveProject} />
+      <AddProject handleAddProject={handleAddProject} />
     </div>
   )
 });
