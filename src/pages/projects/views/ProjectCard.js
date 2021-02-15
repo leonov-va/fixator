@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const ProjectCard = React.memo(({ id, name, handleRemoveProject }) => {
@@ -8,7 +9,7 @@ const ProjectCard = React.memo(({ id, name, handleRemoveProject }) => {
 
   return (
     <>
-      <div>{ name }</div>
+      <Link to={`/project/${id}`}>{ name }</Link>
       <button onClick={handleClick}>Удалить</button>
     </>
   )

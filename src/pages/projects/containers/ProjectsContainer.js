@@ -1,45 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { addProject, removeProject } from '../../../actions.js';
+
 import AddProject from '../views/AddProject';
 import ProjectList from '../views/ProjectList';
 
-const ProjectsContainer = React.memo(props => {
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: 'Ruvita',
-    },
-    {
-      id: 2,
-      name: 'Test',
-    },
-    {
-      id: 3,
-      name: 'Google',
-    },
-  ]);
+const ProjectsContainer = React.memo(({ projects, handleAddProject, handleRemoveProject }) => {
+  const [projectsList, setProjectsList] = useState([]);
 
-  const handleAddProject = (name) => {
-    setProjects(prevState => {
-      return [
-        ...prevState,
-        {
-          id: Date.now(),
-          name,
-        }
-      ];
-    });
-  };
-
-  const handleRemoveProject = (id) => {
-    setProjects(prevState => prevState.filter(project => project.id !== id));
-  }
+  useEffect(() => {
+    setProjectsList(projects);
+  }, [projects]);
 
   return (
-    <div>
-      <ProjectList projects={projects} handleRemoveProject={handleRemoveProject} />
-      <AddProject handleAddProject={handleAddProject} />
-    </div>
+    <>
+      <ProjectList projects={projectsList} handleRemoveProject={(id) => handleRemoveProject(id)} />
+      <AddProject handleAddProject={(name) => handleAddProject(name)}/>
+    </>
   )
 });
 
-export default ProjectsContainer;
+ProjectsContainer.propTypes = {
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  handleAddProject: PropTypes.func.isRequired,
+  handleRemoveProject: PropTypes.func.isRequired,
+};
+
+export default connect(
+  state => ({
+    projects: state.projects,
+  }),
+  dispatch => ({
+    handleAddProject: bindActionCreators(addProject, dispatch),
+    handleRemoveProject: bindActionCreators(removeProject, dispatch),
+  })
+)(ProjectsContainer);

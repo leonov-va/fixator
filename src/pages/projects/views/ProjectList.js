@@ -7,7 +7,12 @@ const ProjectList = React.memo(({ projects, handleRemoveProject }) => {
     <>
       {
         !!projects.length && projects.map(({id, name}) => {
-          return <ProjectCard key={id} id={id} name={name} handleRemoveProject={handleRemoveProject} />
+          return <ProjectCard 
+            key={id} 
+            id={id} 
+            name={name} 
+            handleRemoveProject={handleRemoveProject} 
+          />
         })
       }
     </>
