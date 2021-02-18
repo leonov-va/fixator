@@ -1,7 +1,12 @@
-import { ADD_PROJECT, REMOVE_PROJECT } from './actions';
+import { 
+  ADD_PROJECT, 
+  REMOVE_PROJECT, 
+  GET_PROJECT_BY_ID, 
+  ADD_ISSUE,
+  REMOVE_ISSUE
+} from './actions';
 
 const initialState = {
-  test:'string test)',
   projects: [
     { 
       id: 1,
@@ -9,8 +14,18 @@ const initialState = {
       issues: [
         {
           id: 21,
-          name: 'issues Ruvita',
-        }
+          screen: 'https://cdn.pixabay.com/photo/2021/02/06/14/24/lavanttal-5988332__340.jpg',
+          description: 'bug #1',
+          isFixed: false,
+          isChecked: false,
+        },
+        {
+          id: 213,
+          screen: 'https://cdn.pixabay.com/photo/2020/10/08/17/39/waves-5638587__340.jpg',
+          description: 'bug #2',
+          isFixed: false,
+          isChecked: false,
+        },
       ]
      },
     { 
@@ -19,8 +34,18 @@ const initialState = {
       issues: [
         {
           id: 213,
-          name: 'issues Test',
-        }
+          screen: 'https://cdn.pixabay.com/photo/2019/12/03/22/22/dog-4671215__340.jpg',
+          description: 'bug #1',
+          isFixed: false,
+          isChecked: false,
+        },
+        {
+          id: 21,
+          screen: 'https://cdn.pixabay.com/photo/2020/08/10/09/29/mountains-5477320__340.jpg',
+          description: 'bug #2',
+          isFixed: false,
+          isChecked: false,
+        },
       ]
      },
     { 
@@ -29,7 +54,10 @@ const initialState = {
       issues: [
         {
           id: 123,
-          name: 'issues Google',
+          screen: 'https://cdn.pixabay.com/photo/2020/11/28/02/17/island-5783440__340.jpg',
+          description: 'bug #1',
+          isFixed: false,
+          isChecked: false,
         }
       ]
      }
@@ -50,11 +78,44 @@ const projectsReducer = ( state = initialState, action ) => {
         ]
       };
     case REMOVE_PROJECT:
-      console.log('###action.id: ', action.id);
       return {
         ...state,
         projects: state.projects.filter(project => project.id !== action.id),
       };
+    case GET_PROJECT_BY_ID:
+      return state.projects.filter(project => project.id === action.id);
+    case ADD_ISSUE: 
+      return {
+         projects: state.projects.map(project => {
+           if (project.id === parseInt(action.id)) {
+             return {
+               ...project,
+               issues: [
+                 ...project.issues,
+                 {
+                   ...action.issue,
+                   id: Date.now(),
+                   isFixed: false,
+                   isChecked: false,
+                 }
+               ]
+             }
+           }
+           return project;
+         })
+      };
+    case REMOVE_ISSUE:
+      return {
+        projects: state.projects.map(project => {
+          if (project.id === parseInt(action.id)) {
+            return {
+              ...project,
+              issues: project.issues.filter(issue => issue.id !== parseInt(action.issueId))
+            };
+          }
+          return project;
+        })
+      }
     default:
       return state;
   }  

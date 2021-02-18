@@ -2,14 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Projects from './pages/projects';
-import Project from './pages/project';
+import Issues from './pages/issues';
 
 const App = React.memo(props => {
   return (
     <Router>
       <Switch>
         <Route path="/project/:id">
-          <Project />
+          <Issues />
         </Route>
         <Route path="/" exact>
           <Projects />
